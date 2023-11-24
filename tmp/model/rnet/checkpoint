@@ -1,2 +1,2 @@
-model_checkpoint_path: "C:\\Users\\User\\Documents\\MTCNN\\tmp/model/rnet/rnet-30"
-all_model_checkpoint_paths: "C:\\Users\\User\\Documents\\MTCNN\\tmp/model/rnet/rnet-30"
+model_checkpoint_path: "C:\\Users\\User\\Desktop\\MTCNN\\tmp/model/rnet/rnet-30"
+all_model_checkpoint_paths: "C:\\Users\\User\\Desktop\\MTCNN\\tmp/model/rnet/rnet-30"
