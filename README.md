@@ -1,6 +1,6 @@
-# Improved MTCNN TF2 Training
+# Improved MTCNN TF Training
 
-This repository contains an improved version of MTCNN training using TensorFlow 2. It is based on [AITTSMD/MTCNN-Tensorflow](https://edgeservices.bing.com/edgesvc/%5E1%5E), which reproduces the original MTCNN paper. The main enhancements are:
+This repository contains an improved version of MTCNN training using TensorFlow. It is based on [AITTSMD/MTCNN-Tensorflow](https://edgeservices.bing.com/edgesvc/%5E1%5E), which reproduces the original MTCNN paper. The main enhancements are:
 
 * Simpler and clearer code structure
 * Easy to execute
