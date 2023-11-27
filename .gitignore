@@ -2,4 +2,7 @@
 /dataset/WIDER_train
 /tmp/data
 /tmp/logs
-/fddb
+/fddb/originalPics
+/fddb/fddb-output-python
+/wider_eval/WIDER_val
+/wider_eval/wider-output

@@ -11,7 +11,7 @@ from training.mtcnn_config import config
 class MtcnnDetector(object):
     def __init__(self,
                  detectors,
-                 min_face_size=20,
+                 min_face_size=24,
                  stride=2,
                  threshold=[0.6, 0.7, 0.7],
                  scale_factor=0.79):
@@ -34,6 +34,11 @@ class MtcnnDetector(object):
         -------
             square bbox
         """
+
+        if bbox is None:
+            print("bbox is None")
+            return None
+    
         square_bbox = bbox.copy()
 
         h = bbox[:, 3] - bbox[:, 1] + 1

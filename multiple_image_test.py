@@ -17,7 +17,7 @@ min_face_size = 24
 stride = 2
 detectors = [None, None, None]
 prefix = ['./tmp/model/pnet/pnet', './tmp/model/rnet/rnet', './tmp/model/onet/onet']
-epoch = [30, 30, 2]
+epoch = [30, 30, 30]
 batch_size = [2048, 64, 16]
 model_path = ['%s-%s' % (x, y) for x, y in zip(prefix, epoch)]
 

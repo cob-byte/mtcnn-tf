@@ -38,7 +38,7 @@ mtcnn_detector = MtcnnDetector(detectors=detectors, min_face_size=min_face_size,
                                stride=stride, threshold=thresh)
 
 # Capture a single image from the camera
-cap = cv2.VideoCapture(0)  # Use 0 for default camera, you can change this number if you have multiple cameras
+cap = cv2.VideoCapture(0)
 
 # Capture frame-by-frame
 ret, frame = cap.read()

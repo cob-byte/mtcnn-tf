@@ -212,13 +212,6 @@ def P_Net(inputs,label=None,bbox_target=None,landmark_target=None,training=True)
         _activation_summary(landmark_pred)
         print (landmark_pred.get_shape())
 
-
-        # add projectors for visualization
-
-
-
-
-
         #cls_prob_original = conv4_1 
         #bbox_pred_original = bbox_pred
         if training:
