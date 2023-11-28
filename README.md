@@ -36,4 +36,32 @@ Training Steps：
   9. Run `python gen_tfrecords.py --stage onet`
   9. Run `python train.py --stage onet`
 
-And you're done! Enjoy the results! :)
+And you're done! Enjoy the results! :)i
+
+
+FDDB Result (Face Detection Dataset and Benchmark):
+
+True positive rate - 0.93
+False positive - 422
+
+![1701146044531](image/README/1701146044531.png)
+
+
+Wider Face Detection Benchmark:
+
+wider evaluation
+easy - 0.803
+medium - 0.775
+hard - 0.508
+
+![1701146114831](image/README/1701146114831.png)
+
+    **EASY SET**
+
+![1701146190521](image/README/1701146190521.png)
+
+    **MEDIUM SET**
+
+![1701146216546](image/README/1701146216546.png)
+
+    **HARD SET**
