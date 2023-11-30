@@ -39,7 +39,7 @@ Training Steps：
 And you're done! Enjoy the results! :)i
 
 
-FDDB Result (Face Detection Dataset and Benchmark):
+#FDDB Result (Face Detection Dataset and Benchmark):
 
 True positive rate - 0.93
 False positive - 422
@@ -47,7 +47,7 @@ False positive - 422
 ![1701146044531](image/README/1701146044531.png)
 
 
-Wider Face Detection Benchmark:
+#Wider Face Detection Benchmark:
 
 wider evaluation
 easy - 0.803
