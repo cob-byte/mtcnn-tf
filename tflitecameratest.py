@@ -19,11 +19,11 @@ rnet_interpreter.allocate_tensors()
 onet_interpreter = tf.lite.Interpreter(model_path=onet_model_path)
 onet_interpreter.allocate_tensors()
 
-def preprocess_image(image, target_shape):
+def preprocess_image(image, target_shape, batch_size=1):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = cv2.resize(image, target_shape[:2])  # Resize the image
     image = (np.float32(image) - 127.5) / 127.5  # Normalize the image
-    return np.expand_dims(image, axis=0)
+    return np.expand_dims(image, axis=0).repeat(batch_size, axis=0)
 
 video_capture = cv2.VideoCapture(0)
 while True:
@@ -31,11 +31,11 @@ while True:
     if not ret:
         print("Failed to capture frame")
         break
-    
+
     # Preprocess the frame for each model
-    pnet_input = preprocess_image(frame, (12, 12, 3))  # Adjust target width/height for P-Net
-    rnet_input = preprocess_image(frame, (24, 24, 3))  # Fixed size for R-Net
-    onet_input = preprocess_image(frame, (48, 48, 3))  # Fixed size for O-Net
+    pnet_input = preprocess_image(frame, (12, 12, 3), 1)  # Fixed size for R-Net
+    rnet_input = preprocess_image(pnet_input, (24, 24, 3), 64)  # Fixed size for R-Net
+    onet_input = preprocess_image(rnet_input, (48, 48, 3), 16)  # Fixed size for O-Net
 
 
     # Set the input tensors for each interpreter
@@ -53,17 +53,20 @@ while True:
     rnet_output = rnet_interpreter.get_tensor(rnet_interpreter.get_output_details()[0]['index'])
     onet_output = onet_interpreter.get_tensor(onet_interpreter.get_output_details()[0]['index'])
 
+
+    print(pnet_interpreter.get_output_details())
+    print(rnet_interpreter.get_output_details())
+    print(onet_interpreter.get_output_details())
+
     # Process the output tensors for P-Net
     pnet_boxes = pnet_output[0]  # Extract bounding boxes
-    pnet_scores = pnet_output[1]  # Extract confidence scores
 
     # Filter out low-confidence detections
     pnet_threshold = 0.5  # You can adjust this threshold
-    pnet_indices = np.where(pnet_scores > pnet_threshold)[0]
+    pnet_indices = np.where(pnet_boxes[:, -1] > pnet_threshold)[0]
 
     # Extract boxes and scores based on filtered indices
     pnet_filtered_boxes = pnet_boxes[pnet_indices]
-    pnet_filtered_scores = pnet_scores[pnet_indices]
 
     # Process the output tensors for R-Net
     rnet_boxes = rnet_output[0]  # Extract bounding boxes
@@ -94,26 +97,23 @@ while True:
     # Draw bounding boxes and landmarks for P-Net
     for i in range(pnet_filtered_boxes.shape[0]):
         bbox = pnet_filtered_boxes[i]
-        score = pnet_filtered_scores[i]
-
-        corpbbox = [int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])]
-        cv2.rectangle(frame, (corpbbox[0], corpbbox[1]), (corpbbox[2], corpbbox[3]), (255, 0, 0), 1)
-        cv2.putText(frame, '{:.3f}'.format(score), (corpbbox[0], corpbbox[1] - 2), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+        if len(bbox) == 4:
+            corpbbox = [int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])]
+            cv2.rectangle(frame, (corpbbox[0], corpbbox[1]), (corpbbox[2], corpbbox[3]), (255, 0, 0), 1)
+            cv2.putText(frame, '{:.3f}'.format(score), (corpbbox[0], corpbbox[1] - 2), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
     # Draw bounding boxes for R-Net
     for i in range(rnet_filtered_boxes.shape[0]):
         bbox = rnet_filtered_boxes[i]
         score = rnet_filtered_scores[i]
-
-        corpbbox = [int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])]
-        cv2.rectangle(frame, (corpbbox[0], corpbbox[1]), (corpbbox[2], corpbbox[3]), (0, 255, 0), 1)
-        cv2.putText(frame, '{:.3f}'.format(score), (corpbbox[0], corpbbox[1] - 2), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+        print(bbox)
+        
 
     # Draw bounding boxes and landmarks for O-Net
     for i in range(onet_filtered_boxes.shape[0]):
         bbox = onet_filtered_boxes[i]
         score = onet_filtered_scores[i]
-
+        
         corpbbox = [int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])]
         cv2.rectangle(frame, (corpbbox[0], corpbbox[1]), (corpbbox[2], corpbbox[3]), (0, 0, 255), 1)
         cv2.putText(frame, '{:.3f}'.format(score), (corpbbox[0], corpbbox[1] - 2), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
