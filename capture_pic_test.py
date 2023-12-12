@@ -65,4 +65,4 @@ if ret:
     # cv2.imshow("test",image)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
-    cv2.imwrite('test-11.png',image)
+    cv2.imwrite('test11.png',image)
